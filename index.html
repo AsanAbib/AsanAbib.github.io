@@ -1,0 +1,180 @@
+﻿<html>
+<head>
+<meta charset="utf8">
+<title>Домашнее задание №1</title>
+<style>
+table 
+{
+	border:1px solid black;
+	width:550px;
+}
+.result { font-weight: bold; } 
+#payment { text-decoration: underline; }
+</style>
+</head>
+<body>
+<form name="geometric_progression">
+<table>
+<tr><td colspan="2" align="center"><b>Геометрическая прогрессия</b></td></tr>
+<tr>
+<td>Первое число геометрической прогрессии:</td>
+<td><input type="text" name="first_number" onchange="calculate();"></td>
+</tr>
+<tr>
+<td>Знаменатель прогрессии:</td>
+<td><input type="text" name="denominator" onchange="calculate( );"></td>
+</tr>
+<tr>
+<td>Выберете номер элемента,который хотите узнать:</td>
+<td><input type="text" name="progression_number" onchange="calculate( );"></td>
+</tr>
+<tr><td></td>
+<td><input type="button" value="OK" onclick="calculate( );"></td>
+</tr>
+<tr><td><b>Вывод:</b></td></tr>
+<tr>
+<td>Элемент с выбранным номером:</td>
+<td><span class="result" id="chose_number"></span></td>
+</tr>
+<tr>
+<td>Соседи выбранного элемента:</td>
+<td><span class="result" id="neighbour"></span></td>
+</tr>
+</table>
+</form>
+	<form name="fibonachi">
+		<table>
+		<tr>
+			<td colspan="2" align="center"><b>Числа Фибоначи</b></td>
+		</tr>
+		<tr>
+			<td>Введите порядковый номер числа Фибоначи :</td>
+			<td><input type="text" name="fib_number"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="button" value="OK" onclick="fibonachi_func( );"></td>
+		</tr>
+		<tr>
+			<td>Значение выбранного элемента :</td>
+			<td><span class="result" id="fib_number_value"></span></td>
+		</tr>
+		</table>
+	</form>
+		<form name="quicksort_form">
+		<table>
+		<tr>
+			<td colspan="2" align="center"><b>QuickSort</b></td>
+		</tr>
+		<tr>
+			<td>Введите несколько чисел через запятую:</td>
+			<td><input type="text" name="quicksort_input"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="button" value="OK" onclick="qsort( );"></td>
+		</tr>
+		<tr>
+		<td>Отсортированный массив:</td>
+		<td><span class="result" id="quicksort_output"></span></td>
+		</table>
+		</form>
+<script language="JavaScript">
+function calculate() 
+{
+	var first_number = document.geometric_progression.first_number.value;
+	var denominator = document.geometric_progression.denominator.value;
+	var progression_number = document.geometric_progression.progression_number.value;
+	var denominator_pow = Math.pow( denominator, progression_number-1);
+	var chose_number_value = (first_number*denominator_pow);
+	var chose_number = document.getElementById("chose_number");
+	var neighbour = document.getElementById("neighbour"); 
+	var i,x;
+	if (isFinite(chose_number_value) && chose_number_value!=1) 
+	{
+		chose_number.innerHTML = chose_number_value;
+		if(chose_number_value == first_number)
+		{
+			var left_neighbour = "No left neighbour";
+		}
+		else 
+		{
+			var left_neighbour = "Left"+"["+(chose_number_value/denominator)+"]";
+		}
+		var right_neighbour = "Right"+"["+(chose_number_value*denominator)+"]";
+		neighbour.innerHTML = [left_neighbour , right_neighbour];
+	}
+	else 
+	{
+		chose_number.innerHTML = "negative input";
+		neighbour.innerHTML = "negative input";
+	}
+}
+function fibonachi_func() 
+{
+	var fib_number = document.fibonachi.fib_number.value;
+	var fib_number_value = document.getElementById("fib_number_value");
+	if(fib_number<1478)
+	{
+		for (i=0, j=1, k=0, fib =0; i<fib_number-1; i++, fib=j+k, j=k, k=fib){
+		}
+		if(isFinite(fib))
+		{
+			fib_number_value.innerHTML = fib ;
+		}
+		else fib_number_value.innerHTML = "negative input";
+	}
+	else
+	{
+		fib_number_value.innerHTML = "negative input";
+	}	
+}
+/*
+ * Алгоритм быстрой сортировки
+ *
+ * @param data Array
+ * @param compare function(a, b) - возвращает 0 если a=b, -1 если a<b и 1 если a>b (необязательная)
+ * @param change function(a, i, j) - меняет местами i-й и j-й элементы массива а (необязательная)
+ *
+ */
+function qsort( ) {  //data, compare, change
+	var tags = document.quicksort_form.quicksort_input.value;
+	var re = /\s*,\s*/;
+	var data = tags.split(re);
+ 	var compare,change;
+    var a = data,
+        f_compare = compare,
+        f_change  = change;
+ 
+    if (f_compare == undefined) { // Будем использовать простую функцию (для чисел)
+        f_compare = function(a, b) {return ((a == b) ? 0 : ((a > b) ? 1 : -1));};
+    };
+    if (f_change == undefined) { // Будем использовать простую смены (для чисел)
+        f_change = function(a, i, j) {var c = a[i];a[i] = a[j];a[j] = c;};
+    };
+ 
+    var qs = function (l, r)  {
+        var i = l,
+            j = r,
+            x = a[l+r>>1];
+            x = a[Math.floor(Math.random()*(r-l+1))+l];
+            // x = a[l]; // Если нет желания использовать объект Math
+ 
+ 
+        while(i <= j) {
+            while(f_compare(a[i], x) == -1) {i++;}
+            while(f_compare(a[j], x) == 1) {j--;}
+            if(i <= j) {f_change(a, i++, j--);}  
+        };
+        if(l < j) {qs(l, j);}
+        if(i < r) {qs(i, r);}
+    };
+ 
+    qs(0, a.length-1);
+    var string = a.join(',');
+    var quicksort_output =document.getElementById("quicksort_output");
+    quicksort_output.innerHTML = string;
+};
+</script>
+</body>
+</html>
